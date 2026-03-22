@@ -1,0 +1,11 @@
+# CMake / local build
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.o
+*.a
+MacTernaryVision
+
+# Symlink to weights outside this folder (clone won't resolve ../)
+yolo_*epoch*_weights.pt
