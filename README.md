@@ -1,6 +1,14 @@
+# Bare-Metal 1.58-Bit Ternary Vision Engine (Apple Silicon)
+
+This repo targets **1.58-bit (ternary {-1, 0, 1})** vision on Apple Silicon: extreme weight compression and efficient inference compared to full-precision floating-point stacks.
+
+The **runnable code** in this tree is **MacTernaryVision** — a real-time face pipeline using OpenCV DNN on M-series CPUs with optional benchmarking (RSS, DNN latency, CPU proxy). A longer architectural narrative (multi-exit VLA, NEON paths, etc.) can live in issues/wiki as the codebase grows.
+
+---
+
 # MacTernaryVision – 1.58-bit YOLO face tracking on Mac M2
 
-Real-time face detection using your ternary YOLO weights with OpenCV DNN on Apple Silicon.
+Real-time face detection using ternary YOLO weights with OpenCV DNN on Apple Silicon.
 
 ## Prerequisites
 
@@ -11,9 +19,8 @@ Real-time face detection using your ternary YOLO weights with OpenCV DNN on Appl
 
 1. **Export ONNX** (fuses `yolo_1.58b_epoch_*_weights.pt` and saves `yolov8s-seg.onnx`):
    ```bash
-   cd MacTernaryVision
+   # from repository root
    python3 export_onnx.py
-   # or: ../venv/bin/python export_onnx.py
    ```
 
 2. **Build C++ app**:
@@ -81,9 +88,9 @@ Interpret vendor docs for your chip; correlate timestamps with your CSV `unix_ms
 - `main.cpp` – OpenCV webcam + DNN inference; segmentation overlay + optional benchmark UI/log.
 - `benchmark_mac.cpp` / `benchmark_mac.hpp` – ONNX file size, Mach RSS, `getrusage` CPU proxy, rolling DNN latency stats.
 - `CMakeLists.txt` – Build config for Homebrew OpenCV on Apple Silicon.
-- `yolo_1.58b_epoch_3_weights.pt` – Symlink to your weights in the parent folder.
+- `yolov8s-seg.onnx` / `yolov8s-seg.pt` – Exported and checkpoint assets included for reproducibility.
 
 ## Notes
 
-- The `.pt` file can be `yolo_1.58b_epoch_1_weights.pt` or `yolo_1.58b_epoch_3_weights.pt`; the script auto-detects it.
+- For `export_onnx.py`, place or symlink `yolo_1.58b_epoch_*_weights.pt` next to the script (see script auto-detect).
 - If the camera window does not appear, run `./MacTernaryVision` from **Terminal.app** (not from an IDE terminal).
